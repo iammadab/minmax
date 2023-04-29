@@ -6,6 +6,14 @@ use crate::tictactoe::{draw_board, Player, TicTacToe, TicTacToeAction};
 use minmax_strategy::minmax_strategy;
 use random_strategy::random_strategy;
 
+fn main() {
+    // Play the minmax strategy again a random move strategy
+    // minmax should win most times and occasionally draw
+    // but should never lose
+    PlayTicTacToe::play(minmax_strategy, random_strategy);
+}
+
+/// Allows you play 2 strategies against one another
 struct PlayTicTacToe<T, U>
 where
     T: Fn(&TicTacToe) -> TicTacToeAction,
@@ -53,6 +61,3 @@ where
     }
 }
 
-fn main() {
-    PlayTicTacToe::play(minmax_strategy, random_strategy);
-}

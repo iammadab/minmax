@@ -33,6 +33,7 @@ impl TicTacToe {
         }
     }
 
+    /// Initializes tic tac toe state from state arguments
     pub(crate) fn new_from_state(board: [Option<Player>; 9], player: Player) -> Self {
         Self { board, player }
     }

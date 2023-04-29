@@ -4,11 +4,10 @@ use rand::seq::SliceRandom;
 type Evaluation = i8;
 type BestMove = u8;
 
-pub(crate) fn minmax_strategy(game: &TicTacToe) -> TicTacToeAction {
-    minmax(game).1.unwrap()
-}
-
-// TODO: clean this up
+/// Searches the game tree from current position and return the best move
+/// based on the current player's score optimization strategy i.e min player
+/// or max player.
+/// See: https://en.wikipedia.org/wiki/Minimax
 fn minmax(game: &TicTacToe) -> (Evaluation, Option<BestMove>) {
     if game.is_terminal() {
         return (game.value(), None);
@@ -37,6 +36,10 @@ fn minmax(game: &TicTacToe) -> (Evaluation, Option<BestMove>) {
             .map(|(action, value)| (value, Some(*action as u8)))
             .unwrap()
     };
+}
+
+pub(crate) fn minmax_strategy(game: &TicTacToe) -> TicTacToeAction {
+    minmax(game).1.unwrap()
 }
 
 #[cfg(test)]
