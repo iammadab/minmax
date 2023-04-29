@@ -81,6 +81,24 @@ impl TicTacToe {
     }
 }
 
+impl Game<TicTacToeAction> for TicTacToe {
+    fn is_terminal(&self) -> bool {
+        self.get_winner().is_ok()
+    }
+
+    fn get_actions(&self) -> Vec<TicTacToeAction> {
+        todo!()
+    }
+
+    fn apply_action(&self, action: TicTacToeAction) -> Self {
+        todo!()
+    }
+
+    fn value(&self) -> u8 {
+        todo!()
+    }
+}
+
 type TicTacToeAction = u8;
 impl Action for TicTacToeAction {}
 
