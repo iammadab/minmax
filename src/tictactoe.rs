@@ -3,7 +3,7 @@ use crate::tictactoe::Player::{O, X};
 type TicTacToeAction = u8;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
-enum Player {
+pub(crate) enum Player {
     X,
     O,
 }
@@ -17,21 +17,21 @@ impl Player {
     }
 }
 
-struct TicTacToe {
+pub(crate) struct TicTacToe {
     board: [Option<Player>; 9],
     player: Player,
 }
 
 impl TicTacToe {
     /// Initializes new tic tac toe state
-    fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Self {
             board: [None; 9],
             player: Player::X,
         }
     }
 
-    fn new_from_state(board: [Option<Player>; 9], player: Player) -> Self {
+    pub(crate) fn new_from_state(board: [Option<Player>; 9], player: Player) -> Self {
         Self { board, player }
     }
 
@@ -39,7 +39,7 @@ impl TicTacToe {
     /// Gives an error if the state is non-terminal
     /// None if it's a draw
     /// and the player variant if there is a winner
-    fn get_winner(&self) -> Result<Option<Player>, String> {
+    pub(crate) fn get_winner(&self) -> Result<Option<Player>, String> {
         // Check horizontal lines
         for i in (0..9).step_by(3) {
             if let Some(player) = self.board[i] {
@@ -81,12 +81,12 @@ impl TicTacToe {
     }
 
     /// Returns true if current game state is a terminal state
-    fn is_terminal(&self) -> bool {
+    pub(crate) fn is_terminal(&self) -> bool {
         self.get_winner().is_ok()
     }
 
     /// Returns all possible actions from the current game state
-    fn get_actions(&self) -> Vec<TicTacToeAction> {
+    pub(crate) fn get_actions(&self) -> Vec<TicTacToeAction> {
         if self.is_terminal() {
             // cannot perform further actions once we have reached the terminal state
             return Vec::new();
@@ -107,7 +107,7 @@ impl TicTacToe {
     //  there is no need to create a new struct for every state transition
     //  should refactor so we only duplicate data and struct just contains
     //  data transformation functions
-    fn apply_action(&self, action: TicTacToeAction) -> Result<Self, String> {
+    pub(crate) fn apply_action(&self, action: TicTacToeAction) -> Result<Self, String> {
         if self.is_terminal() {
             return Err(String::from("game already reached terminal state"));
         }
@@ -132,7 +132,7 @@ impl TicTacToe {
     }
 
     /// Get the value of the current state, must be terminal
-    fn value(&self) -> i8 {
+    pub(crate) fn value(&self) -> i8 {
         // assumes that the current state is terminal
         let winner = self.get_winner().unwrap();
         match winner {
@@ -146,7 +146,7 @@ impl TicTacToe {
     /// Returns false if current player is a max player
     /// min players try to minimize the value output
     /// max players try to maximze the value output
-    fn is_min_player(&self) -> bool {
+    pub(crate) fn is_min_player(&self) -> bool {
         match self.player {
             Player::X => false,
             Player::O => true,
