@@ -1,7 +1,12 @@
-use crate::TicTacToe;
+use crate::{TicTacToe, TicTacToeAction};
+use rand::seq::SliceRandom;
 
 type Evaluation = i8;
 type BestMove = u8;
+
+pub(crate) fn minmax_strategy(game: &TicTacToe) -> TicTacToeAction {
+    minmax(game).1.unwrap()
+}
 
 // TODO: clean this up
 fn minmax(game: &TicTacToe) -> (Evaluation, Option<BestMove>) {
@@ -9,7 +14,12 @@ fn minmax(game: &TicTacToe) -> (Evaluation, Option<BestMove>) {
         return (game.value(), None);
     }
 
-    let actions = game.get_actions();
+    let mut actions = game.get_actions();
+
+    // shuffling action list so minmax doesn't always select the same best move
+    // in cases where there are more than 1 best moves
+    actions.shuffle(&mut rand::thread_rng());
+
     let values = actions
         .iter()
         .map(|action| minmax(&game.apply_action(action.clone()).unwrap()).0)

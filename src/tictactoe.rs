@@ -1,6 +1,7 @@
 use crate::tictactoe::Player::{O, X};
+use std::fmt::Write;
 
-type TicTacToeAction = u8;
+pub(crate) type TicTacToeAction = u8;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub(crate) enum Player {
@@ -17,9 +18,10 @@ impl Player {
     }
 }
 
+#[derive(Debug)]
 pub(crate) struct TicTacToe {
-    board: [Option<Player>; 9],
-    player: Player,
+    pub(crate) board: [Option<Player>; 9],
+    pub(crate) player: Player,
 }
 
 impl TicTacToe {
@@ -151,6 +153,47 @@ impl TicTacToe {
             Player::X => false,
             Player::O => true,
         }
+    }
+}
+
+pub(crate) fn draw_board(game: &TicTacToe) -> String {
+    let mut output = String::new();
+
+    writeln!(
+        &mut output,
+        " {} | {} | {}",
+        square(0, game),
+        square(1, game),
+        square(2, game)
+    )
+    .unwrap();
+    writeln!(&mut output, "---+---+---").unwrap();
+    writeln!(
+        &mut output,
+        " {} | {} | {}",
+        square(3, game),
+        square(4, game),
+        square(5, game)
+    )
+    .unwrap();
+    writeln!(&mut output, "---+---+---").unwrap();
+    writeln!(
+        &mut output,
+        " {} | {} | {}",
+        square(6, game),
+        square(7, game),
+        square(8, game)
+    )
+    .unwrap();
+
+    output
+}
+
+fn square(index: usize, game: &TicTacToe) -> String {
+    match game.board[index] {
+        Some(Player::X) => "X".to_string(),
+        Some(Player::O) => "O".to_string(),
+        None => " ".to_string(),
     }
 }
 
