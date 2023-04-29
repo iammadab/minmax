@@ -13,6 +13,11 @@ trait Game<A: Action> {
         Self: Sized;
     /// Get the value of the current state, must be terminal
     fn value(&self) -> i8;
+    /// Returns true if current player is a min player
+    /// Returns false if current player is a max player
+    /// min players try to minimize the value output
+    /// max players try to maximze the value output
+    fn is_min_player(&self) -> bool;
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -150,6 +155,13 @@ impl Game<TicTacToeAction> for TicTacToe {
             Some(Player::X) => 1,
             Some(Player::O) => -1,
             None => 0,
+        }
+    }
+
+    fn is_min_player(&self) -> bool {
+        match self.player {
+            Player::X => false,
+            Player::O => true
         }
     }
 }
@@ -349,5 +361,22 @@ mod tests {
 
         // try to play after terminal
         assert_eq!(game.apply_action(8).is_err(), true);
+    }
+}
+
+fn minmax<A: Action>(game: Box<dyn Game<A>>) -> i8 {
+    if game.is_terminal() {
+        return game.value();
+    }
+
+    let actions = game.get_actions();
+    let values = actions.iter().map(|action| {
+        minmax(game.apply_action(action).unwrap())
+    }).collect::<Vec<i8>>();
+
+    return if game.is_min_player() {
+        values.iter().min().unwrap().clone()
+    } else {
+        values.iter().max().unwrap().clone()
     }
 }
